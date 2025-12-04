@@ -1,10 +1,9 @@
 /* * HAUPTLOGIK DG-CHECKER
- * Version 2025 (Enterprise Clean)
+ * Version Final
  */
 
 const dataLoader = new DataLoader();
 
-// LOKALE BILDER
 const HAZARD_LABELS = {
     "2.1": "img/class_2.1.png",
     "2.2": "img/class_2.2.png",
@@ -185,6 +184,7 @@ window.closeModal = function() { document.getElementById('pi-modal').classList.a
 function addQItemRow() {
     const list = document.getElementById('q-items-list');
     const div = document.createElement('div'); div.classList.add('q-row');
+    // WICHTIG: Klasse 'delete-btn-wrapper' hinzugefügt für das CSS
     div.innerHTML = `<div style="flex:1;"><label>UN-Nummer</label><input type="text" class="q-un" list="un-list" placeholder="2811"></div><div style="flex:1;"><label>PG</label><select class="q-pg"><option value="I">I</option><option value="II">II</option><option value="III">III</option><option value="null">Keine</option></select></div><div style="flex:1;"><label>Menge</label><input type="number" class="q-qty" placeholder="0" step="0.000001"></div><div style="flex:0.5;"><label>Einheit</label><select class="q-unit"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="ml">ml</option></select></div><div class="delete-btn-wrapper"><button type="button" class="btn-delete" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
     list.appendChild(div);
 }
@@ -218,6 +218,7 @@ function calculateQValue() {
 function addPkgRow() {
     const list = document.getElementById('pkg-list');
     const div = document.createElement('div'); div.classList.add('pkg-row');
+    // WICHTIG: Klasse 'delete-btn-wrapper' hinzugefügt für das CSS
     div.innerHTML = `<div><label>Anzahl</label><input type="number" class="pkg-count" value="1" min="1"></div><div style="flex:2;"><label>Verpackung</label><select class="pkg-type"><option value="Fibreboard box">Fibreboard box (4G)</option><option value="Plywood box">Plywood box (4D)</option><option value="Wooden box">Wooden box (4C1)</option><option value="Fibre drum">Fibre drum (1G)</option><option value="Plastic drum">Plastic drum (1H2)</option><option value="Steel drum">Steel drum (1A1/1A2)</option><option value="Jerrican">Jerrican (3H1/3H2)</option></select></div><div><label>Menge</label><input type="number" class="pkg-qty" placeholder="0.5" step="0.000001"></div><div><label>Einh.</label><select class="pkg-unit"><option value="kg">kg</option><option value="L">L</option><option value="g">g</option><option value="ml">ml</option></select></div><div class="delete-btn-wrapper"><button type="button" class="btn-delete" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
     list.appendChild(div);
 }

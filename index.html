@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DG Check</title>
-    <link rel="stylesheet" href="css/style.css?v=6">
+    <link rel="stylesheet" href="css/style.css?v=final">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -24,7 +24,7 @@
 
         <section id="section-single-check" class="app-section">
             <div class="section-header">
-                <h2>🔎 Sendung prüfen</h2>
+                <h2>Sendung prüfen</h2>
             </div>
             
             <form id="form-single-check">
@@ -38,10 +38,10 @@
                     <label for="packing-group">Verpackungsgruppe</label>
                     <select id="packing-group">
                         <option value="">-- Bitte wählen --</option>
-                        <option value="null">Keine (z.B. Batterien/Gase)</option>
-                        <option value="I">I (Hohe Gefahr)</option>
-                        <option value="II">II (Mittlere Gefahr)</option>
-                        <option value="III">III (Geringe Gefahr)</option>
+                        <option value="null">Keine</option>
+                        <option value="I">I</option>
+                        <option value="II">II</option>
+                        <option value="III">III</option>
                     </select>
                 </div>
 
@@ -64,7 +64,7 @@
 
         <section id="section-pack-gen" class="app-section hidden">
             <div class="section-header">
-                <h2>📝 Packstück-Generator</h2>
+                <h2>Packstück-Generator</h2>
             </div>
             
             <div id="pkg-list"></div>
@@ -72,7 +72,7 @@
             <button id="btn-add-pkg" class="secondary-btn dashed">+ Verpackung hinzufügen</button>
             
             <div class="form-group" style="margin-top:20px;">
-                <label style="display:flex; align-items:center; cursor:pointer;">
+                <label style="display:flex; align-items:center; cursor:pointer; text-transform: none;">
                     <input type="checkbox" id="overpack-check" style="width:auto; margin-right:10px;">
                     <span>Overpack used (Umverpackung)</span>
                 </label>
@@ -89,14 +89,14 @@
 
         <section id="section-q-calc" class="app-section hidden">
             <div class="section-header">
-                <h2>📦 Q-Wert Rechner</h2>
+                <h2>Q-Wert Rechner</h2>
                 <p style="color:#666; font-size:0.9rem;">"All packed in one" (Mischverpackung)</p>
             </div>
             
             <div class="mode-switch-container">
                 <div class="mode-switch">
-                    <label><input type="radio" name="transport-mode" value="PAX" checked> Passenger (PAX)</label>
-                    <label><input type="radio" name="transport-mode" value="CAO"> Cargo Only (CAO)</label>
+                    <label style="text-transform: none;"><input type="radio" name="transport-mode" value="PAX" checked> Passenger (PAX)</label>
+                    <label style="text-transform: none;"><input type="radio" name="transport-mode" value="CAO"> Cargo Only (CAO)</label>
                 </div>
             </div>
             
@@ -124,7 +124,7 @@
         </div>
     </div>
 
-    <script src="js/data-loader.js?v=6"></script>
-    <script src="js/app.js?v=6"></script>
+    <script src="js/data-loader.js?v=final"></script>
+    <script src="js/app.js?v=final"></script>
 </body>
 </html>
