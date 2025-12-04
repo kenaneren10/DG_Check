@@ -1,10 +1,10 @@
 /* * HAUPTLOGIK DG-CHECKER
- * Version 2025 (Modern UI & Dark Mode)
+ * Version 2025 (Enterprise Clean)
  */
 
 const dataLoader = new DataLoader();
 
-// LOKALE BILDER - Bitte sicherstellen, dass die Bilder im Ordner "img" liegen!
+// LOKALE BILDER
 const HAZARD_LABELS = {
     "2.1": "img/class_2.1.png",
     "2.2": "img/class_2.2.png",
@@ -22,48 +22,15 @@ const HAZARD_LABELS = {
 };
 const LABEL_CAO = "img/cao.png";
 
-/* --- INITIALISIERUNG --- */
 document.addEventListener('DOMContentLoaded', async () => {
-    
-    // 1. Dark Mode initialisieren (bevor Daten geladen werden, damit es nicht flackert)
-    initTheme();
-
-    // 2. Daten laden
     const success = await dataLoader.loadAllData();
     if (success) {
         fillUnDatalist();
         setupEventListeners();
-        addQItemRow(); // Erste Zeile Q-Rechner
-        addPkgRow();   // Erste Zeile Pack-Generator
+        addQItemRow();
+        addPkgRow();
     }
 });
-
-/* --- DARK MODE LOGIK --- */
-function initTheme() {
-    const currentTheme = localStorage.getItem('theme');
-    const toggleBtn = document.getElementById('theme-toggle');
-    const iconSpan = toggleBtn ? toggleBtn.querySelector('.icon') : null;
-
-    if (currentTheme) {
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        if (currentTheme === 'dark' && iconSpan) iconSpan.textContent = '☀️';
-    }
-
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-                if(iconSpan) iconSpan.textContent = '🌙';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                if(iconSpan) iconSpan.textContent = '☀️';
-            }
-        });
-    }
-}
 
 function fillUnDatalist() {
     const unList = document.getElementById('un-list');
@@ -76,36 +43,27 @@ function fillUnDatalist() {
 }
 
 function setupEventListeners() {
-    // Tabs
     document.getElementById('btn-single-check').addEventListener('click', () => switchTab('single'));
     document.getElementById('btn-q-calc').addEventListener('click', () => switchTab('q-calc'));
     document.getElementById('btn-pack-gen').addEventListener('click', () => switchTab('pack-gen'));
-
-    // Formulare & Buttons
     document.getElementById('form-single-check').addEventListener('submit', handleSingleCheck);
     document.getElementById('btn-add-item').addEventListener('click', addQItemRow);
     document.getElementById('btn-calc-q').addEventListener('click', calculateQValue);
     document.getElementById('btn-add-pkg').addEventListener('click', addPkgRow);
     document.getElementById('btn-gen-text').addEventListener('click', generatePkgText);
     document.getElementById('btn-copy-text').addEventListener('click', copyPkgText);
-
-    // Modal Events
     document.querySelector('.close-modal').addEventListener('click', closeModal);
     window.onclick = function(event) { if (event.target == document.getElementById('pi-modal')) closeModal(); }
 }
 
 function switchTab(mode) {
-    // Alle Sections ausblenden
     document.getElementById('section-single-check').classList.add('hidden');
     document.getElementById('section-q-calc').classList.add('hidden');
     document.getElementById('section-pack-gen').classList.add('hidden');
-    
-    // Buttons deaktivieren
     document.getElementById('btn-single-check').classList.remove('active');
     document.getElementById('btn-q-calc').classList.remove('active');
     document.getElementById('btn-pack-gen').classList.remove('active');
 
-    // Gewünschten Tab aktivieren
     if (mode === 'single') {
         document.getElementById('section-single-check').classList.remove('hidden');
         document.getElementById('btn-single-check').classList.add('active');
@@ -118,16 +76,13 @@ function switchTab(mode) {
     }
 }
 
-/* --- LOGIK EINZEL-CHECK --- */
 function handleSingleCheck(event) {
     event.preventDefault(); 
-    
     const unNumber = document.getElementById('un-number').value.trim();
     let packingGroupInput = document.getElementById('packing-group').value; 
     const netQtyInput = parseFloat(document.getElementById('net-qty').value);
     const unit = document.getElementById('qty-unit').value; 
     const resultContainer = document.getElementById('result-container');
-    
     resultContainer.classList.remove('hidden');
     resultContainer.innerHTML = ''; 
 
@@ -152,43 +107,29 @@ function handleSingleCheck(event) {
 
     let qtyInKg = (unit === 'g' || unit === 'ml') ? netQtyInput / 1000 : netQtyInput;
 
-    // Status prüfen
     let paxStatus = (!entry.is_forbidden_pax) && checkLimit(entry.pax_max_qty, qtyInKg);
     let caoStatus = (!entry.is_forbidden_cao) && checkLimit(entry.cao_max_qty, qtyInKg);
 
-    // LQ Text
-    let lqText = "❌ Nicht erlaubt";
-    let lqColor = "var(--danger)";
-    let lqPiLink = "-";
+    let lqText = "❌ Nicht erlaubt"; let lqColor = "var(--danger)"; let lqPiLink = "-";
     if (entry.lq_allowed) {
         if (entry.lq_max_qty && qtyInKg <= entry.lq_max_qty) {
-            lqText = `✅ Möglich (Max. ${entry.lq_max_qty} kg/L)`;
-            lqColor = "var(--accent)";
+            lqText = `✅ Möglich (Max. ${entry.lq_max_qty} kg/L)`; lqColor = "var(--success)";
         } else {
-            lqText = `⚠️ Menge zu hoch (Limit: ${entry.lq_max_qty} kg/L)`;
-            lqColor = "#d97706"; // Orange
+            lqText = `⚠️ Menge zu hoch (Limit: ${entry.lq_max_qty} kg/L)`; lqColor = "var(--warning)";
         }
         lqPiLink = createPiLink(entry.lq_instruction);
     }
 
-    // De Minimis Text
-    let dmText = "❌ Nicht erlaubt";
-    let dmColor = "var(--danger)";
+    let dmText = "❌ Nicht erlaubt"; let dmColor = "var(--danger)";
     if (entry.de_minimis_allowed) {
-        if (qtyInKg <= 0.1) { 
-            dmText = "✅ Möglich (Max. 1g/1ml innen, 100g außen)";
-            dmColor = "var(--accent)";
-        } else {
-            dmText = "⚠️ Menge zu hoch (> 100g)";
-            dmColor = "#d97706"; 
-        }
+        if (qtyInKg <= 0.1) { dmText = "✅ Möglich (Max. 1g/1ml innen, 100g außen)"; dmColor = "var(--success)"; }
+        else { dmText = "⚠️ Menge zu hoch (> 100g)"; dmColor = "var(--warning)"; }
     }
 
     const paxPiLink = createPiLink(entry.pax_instruction);
     const caoPiLink = createPiLink(entry.cao_instruction);
     let pgDisplay = entry.packing_group ? entry.packing_group : "-";
 
-    // --- BILDER ---
     let hazardImgHtml = "";
     if (HAZARD_LABELS[entry.class]) {
         hazardImgHtml += `<img src="${HAZARD_LABELS[entry.class]}" alt="Klasse ${entry.class}" style="height:80px; margin-right:10px;" onerror="this.style.display='none'">`;
@@ -197,32 +138,15 @@ function handleSingleCheck(event) {
         hazardImgHtml += `<img src="${LABEL_CAO}" alt="Cargo Only" style="height:80px;" onerror="this.style.display='none'">`;
     }
 
-    // HTML Aufbau
     let html = `
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:15px;">
-        <div>
-            <h3>Ergebnis für UN ${unNumber} (PG ${pgDisplay})</h3>
-            <p style="color:var(--text-muted);"><strong>Offizieller Name:</strong> ${entry.proper_shipping_name}</p>
-        </div>
-        <div style="text-align:right;">
-            ${hazardImgHtml}
-        </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:15px;">
+        <div><h3>Ergebnis für UN ${unNumber} (PG ${pgDisplay})</h3><p style="color:var(--text-muted);"><strong>Offizieller Name:</strong> ${entry.proper_shipping_name}</p></div>
+        <div style="text-align:right;">${hazardImgHtml}</div>
     </div>
-    
     <table style="width:100%; margin-top:10px;">
-        <tr style="background:var(--bg-input);"><th>Modus</th><th>Erlaubt?</th><th>Max. Menge / Pkg</th><th>Vorschrift (PI)</th></tr>
-        <tr>
-            <td>Passenger (PAX)</td>
-            <td style="color:${paxStatus ? 'var(--accent)' : 'var(--danger)'}"><strong>${paxStatus ? '✅ OK' : '❌ Verboten'}</strong></td>
-            <td>${entry.pax_max_qty} ${entry.pax_max_qty_unit}</td>
-            <td>${paxPiLink}</td>
-        </tr>
-        <tr>
-            <td>Cargo Only (CAO)</td>
-            <td style="color:${caoStatus ? 'var(--accent)' : 'var(--danger)'}"><strong>${caoStatus ? '✅ OK' : '❌ Verboten'}</strong></td>
-            <td>${entry.cao_max_qty} ${entry.cao_max_qty_unit}</td>
-            <td>${caoPiLink}</td>
-        </tr>
+        <tr style="background:var(--bg-body);"><th>Modus</th><th>Erlaubt?</th><th>Max. Menge / Pkg</th><th>Vorschrift (PI)</th></tr>
+        <tr><td>Passenger (PAX)</td><td style="color:${paxStatus ? 'var(--success)' : 'var(--danger)'}"><strong>${paxStatus ? '✅ OK' : '❌ Verboten'}</strong></td><td>${entry.pax_max_qty} ${entry.pax_max_qty_unit}</td><td>${paxPiLink}</td></tr>
+        <tr><td>Cargo Only (CAO)</td><td style="color:${caoStatus ? 'var(--success)' : 'var(--danger)'}"><strong>${caoStatus ? '✅ OK' : '❌ Verboten'}</strong></td><td>${entry.cao_max_qty} ${entry.cao_max_qty_unit}</td><td>${caoPiLink}</td></tr>
     </table>`;
 
     if (entry.special_provisions && entry.special_provisions.length > 0) {
@@ -234,31 +158,21 @@ function handleSingleCheck(event) {
         html += `</ul></div>`;
     }
 
-    html += `<div style="margin-top:20px; font-size:0.9rem; background:var(--bg-input); padding:15px; border-radius:var(--radius); border:1px solid var(--border);">
-        <strong>Spezial-Optionen:</strong><br>
-        EQ-Code: <strong>${entry.eq_code}</strong><br>
-        Limited Quantity (LQ): <span style="color:${lqColor}"><strong>${lqText}</strong> (PI: ${lqPiLink})</span><br>
-        De Minimis: <span style="color:${dmColor}"><strong>${dmText}</strong></span>
+    html += `<div style="margin-top:20px; font-size:0.9rem; background:var(--bg-body); padding:15px; border-radius:var(--radius); border:1px solid var(--border-color);">
+        <strong>Spezial-Optionen:</strong><br>EQ-Code: <strong>${entry.eq_code}</strong><br>Limited Quantity (LQ): <span style="color:${lqColor}"><strong>${lqText}</strong> (PI: ${lqPiLink})</span><br>De Minimis: <span style="color:${dmColor}"><strong>${dmText}</strong></span>
     </div>`;
-
     resultContainer.innerHTML = html;
 }
 
-/* HILFSFUNKTIONEN */
 function checkLimit(maxLimit, currentQty) { return (maxLimit !== 0 && maxLimit !== null) ? currentQty <= maxLimit : false; }
-function createPiLink(piCode) {
-    if (!piCode || piCode === "Verboten" || piCode === "Forbidden" || piCode === "0") return piCode || "-";
-    return `<span class="pi-link" onclick="openPiModal('${piCode}')">${piCode} ℹ️</span>`;
-}
+function createPiLink(piCode) { if (!piCode || piCode === "Verboten" || piCode === "Forbidden" || piCode === "0") return piCode || "-"; return `<span class="pi-link" onclick="openPiModal('${piCode}')">${piCode} ℹ️</span>`; }
 window.openPiModal = function(piId) {
     const modal = document.getElementById('pi-modal');
     const piData = dataLoader.getPackingInstruction(piId);
     if (piData) {
         document.getElementById('modal-title').innerText = `Verpackungsanweisung ${piId} (${piData.mode})`;
         let content = `<p>${piData.description}</p>`;
-        if (piData.description.includes("Einzelverpackungen sind NICHT erlaubt")) {
-             content += `<p style="color:var(--danger); font-weight:bold; margin-top:10px;">⚠️ ACHTUNG: Nur zusammengesetzte Verpackung erlaubt!</p>`;
-        }
+        if (piData.description.includes("Einzelverpackungen sind NICHT erlaubt")) content += `<p style="color:var(--danger); font-weight:bold; margin-top:10px;">⚠️ ACHTUNG: Nur zusammengesetzte Verpackung erlaubt!</p>`;
         document.getElementById('modal-body').innerHTML = content;
     } else {
         document.getElementById('modal-title').innerText = `PI ${piId}`;
@@ -268,17 +182,10 @@ window.openPiModal = function(piId) {
 }
 window.closeModal = function() { document.getElementById('pi-modal').classList.add('hidden'); }
 
-/* Q-WERT RECHNER */
 function addQItemRow() {
     const list = document.getElementById('q-items-list');
-    const div = document.createElement('div');
-    div.classList.add('q-row');
-    div.innerHTML = `
-        <div style="flex:1;"><label>UN-Nummer</label><input type="text" class="q-un" list="un-list" placeholder="2811"></div>
-        <div style="flex:1;"><label>PG</label><select class="q-pg"><option value="I">I</option><option value="II">II</option><option value="III">III</option><option value="null">Keine</option></select></div>
-        <div style="flex:1;"><label>Menge</label><input type="number" class="q-qty" placeholder="0" step="0.000001"></div>
-        <div style="flex:0.5;"><label>Einheit</label><select class="q-unit"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="ml">ml</option></select></div>
-        <div class="delete-btn-wrapper"><button type="button" class="btn-delete" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
+    const div = document.createElement('div'); div.classList.add('q-row');
+    div.innerHTML = `<div style="flex:1;"><label>UN-Nummer</label><input type="text" class="q-un" list="un-list" placeholder="2811"></div><div style="flex:1;"><label>PG</label><select class="q-pg"><option value="I">I</option><option value="II">II</option><option value="III">III</option><option value="null">Keine</option></select></div><div style="flex:1;"><label>Menge</label><input type="number" class="q-qty" placeholder="0" step="0.000001"></div><div style="flex:0.5;"><label>Einheit</label><select class="q-unit"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="ml">ml</option></select></div><div class="delete-btn-wrapper"><button type="button" class="btn-delete" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
     list.appendChild(div);
 }
 
@@ -287,45 +194,31 @@ function calculateQValue() {
     const mode = document.querySelector('input[name="transport-mode"]:checked').value; 
     const resultBox = document.getElementById('q-result');
     let Q = 0; let detailsHtml = '<ul style="font-size:0.9rem; list-style-type: none; padding-left: 0;">'; let error = false;
-
     for (let row of rows) {
         const un = row.querySelector('.q-un').value.trim();
-        let pgInput = row.querySelector('.q-pg').value;
-        const pg = (pgInput === "null") ? null : pgInput;
-        const qty = parseFloat(row.querySelector('.q-qty').value);
-        const unit = row.querySelector('.q-unit').value;
-
+        let pgInput = row.querySelector('.q-pg').value; const pg = (pgInput === "null") ? null : pgInput;
+        const qty = parseFloat(row.querySelector('.q-qty').value); const unit = row.querySelector('.q-unit').value;
         if (!un || isNaN(qty)) continue; 
         const entry = dataLoader.getDGEntry(un, pg);
         if (!entry) { alert(`Fehler: UN ${un} nicht gefunden.`); error = true; break; }
-
         let maxQty = (mode === 'PAX') ? entry.pax_max_qty : entry.cao_max_qty;
         if (!maxQty) { alert(`Fehler: UN ${un} ist im Modus ${mode} verboten!`); error = true; break; }
-
         let currentQtyKg = (unit === 'g' || unit === 'ml') ? qty / 1000 : qty;
-        let q_part = currentQtyKg / maxQty;
-        Q += q_part;
-        detailsHtml += `<li style="margin-bottom: 5px; border-bottom: 1px solid var(--border); padding-bottom:5px;"><strong>UN ${un}:</strong> Rechnung: ${currentQtyKg} / ${maxQty} = <strong>${q_part.toFixed(4)}</strong></li>`;
+        let q_part = currentQtyKg / maxQty; Q += q_part;
+        detailsHtml += `<li style="margin-bottom: 5px; border-bottom: 1px solid var(--border-color); padding-bottom:5px;"><strong>UN ${un}:</strong> Rechnung: ${currentQtyKg} / ${maxQty} = <strong>${q_part.toFixed(4)}</strong></li>`;
     }
     if (error) return;
     let finalQ = Math.ceil(Q * 10) / 10; 
     resultBox.classList.remove('hidden');
-    let color = (finalQ <= 1.0) ? 'var(--accent)' : 'var(--danger)';
+    let color = (finalQ <= 1.0) ? 'var(--success)' : 'var(--danger)';
     let status = (finalQ <= 1.0) ? '✅ ERLAUBT' : '❌ NICHT ERLAUBT';
     resultBox.innerHTML = `<h3>Q-Wert: ${finalQ.toFixed(1)}</h3><p style="color:${color}; font-size:1.3rem; font-weight:bold;">${status}</p>${detailsHtml}</ul>`;
 }
 
-/* PACKSTÜCK GENERATOR */
 function addPkgRow() {
     const list = document.getElementById('pkg-list');
-    const div = document.createElement('div');
-    div.classList.add('pkg-row');
-    div.innerHTML = `
-        <div><label>Anzahl</label><input type="number" class="pkg-count" value="1" min="1"></div>
-        <div style="flex:2;"><label>Verpackung</label><select class="pkg-type"><option value="Fibreboard box">Fibreboard box (4G)</option><option value="Plywood box">Plywood box (4D)</option><option value="Wooden box">Wooden box (4C1)</option><option value="Fibre drum">Fibre drum (1G)</option><option value="Plastic drum">Plastic drum (1H2)</option><option value="Steel drum">Steel drum (1A1/1A2)</option><option value="Jerrican">Jerrican (3H1/3H2)</option></select></div>
-        <div><label>Menge</label><input type="number" class="pkg-qty" placeholder="0.5" step="0.000001"></div>
-        <div><label>Einh.</label><select class="pkg-unit"><option value="kg">kg</option><option value="L">L</option><option value="g">g</option><option value="ml">ml</option></select></div>
-        <div class="delete-btn-wrapper"><button type="button" class="btn-delete" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
+    const div = document.createElement('div'); div.classList.add('pkg-row');
+    div.innerHTML = `<div><label>Anzahl</label><input type="number" class="pkg-count" value="1" min="1"></div><div style="flex:2;"><label>Verpackung</label><select class="pkg-type"><option value="Fibreboard box">Fibreboard box (4G)</option><option value="Plywood box">Plywood box (4D)</option><option value="Wooden box">Wooden box (4C1)</option><option value="Fibre drum">Fibre drum (1G)</option><option value="Plastic drum">Plastic drum (1H2)</option><option value="Steel drum">Steel drum (1A1/1A2)</option><option value="Jerrican">Jerrican (3H1/3H2)</option></select></div><div><label>Menge</label><input type="number" class="pkg-qty" placeholder="0.5" step="0.000001"></div><div><label>Einh.</label><select class="pkg-unit"><option value="kg">kg</option><option value="L">L</option><option value="g">g</option><option value="ml">ml</option></select></div><div class="delete-btn-wrapper"><button type="button" class="btn-delete" onclick="this.parentElement.parentElement.remove()">X</button></div>`;
     list.appendChild(div);
 }
 
@@ -335,10 +228,8 @@ function generatePkgText() {
     const overpack = document.getElementById('overpack-check').checked;
     let text = "";
     rows.forEach(row => {
-        const count = row.querySelector('.pkg-count').value;
-        const type = row.querySelector('.pkg-type').value;
-        const qty = row.querySelector('.pkg-qty').value;
-        const unit = row.querySelector('.pkg-unit').value;
+        const count = row.querySelector('.pkg-count').value; const type = row.querySelector('.pkg-type').value;
+        const qty = row.querySelector('.pkg-qty').value; const unit = row.querySelector('.pkg-unit').value;
         if (count && qty) text += `${count} ${type} x ${qty} ${unit}\n`;
     });
     if (overpack) text += "\nOverpack used";
@@ -347,11 +238,8 @@ function generatePkgText() {
 }
 
 function copyPkgText() {
-    const copyText = document.getElementById("pkg-output-text");
-    copyText.select();
+    const copyText = document.getElementById("pkg-output-text"); copyText.select();
     navigator.clipboard.writeText(copyText.value);
-    const btn = document.getElementById('btn-copy-text');
-    const originalText = btn.innerText;
-    btn.innerText = "✅ Kopiert!";
-    setTimeout(() => btn.innerText = originalText, 2000);
+    const btn = document.getElementById('btn-copy-text'); const originalText = btn.innerText;
+    btn.innerText = "✅ Kopiert!"; setTimeout(() => btn.innerText = originalText, 2000);
 }
