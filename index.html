@@ -1,49 +1,61 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DG Check</title>
-    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/style.css?v=modern">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
-        <div class="header-content">
-            <img src="img/logo.png?v=2" alt="DG Check Logo" class="app-logo">
+        <div class="header-inner">
+            <div class="logo-area">
+                <img src="img/logo.png" alt="DG Check" class="app-logo">
+            </div>
+            
+            <button id="theme-toggle" class="icon-btn" title="Design wechseln">
+                <span class="icon">🌙</span>
+            </button>
         </div>
     </header>
 
     <main>
         <nav class="app-nav">
             <button id="btn-single-check" class="nav-btn active">Sendungsprüfung</button>
-            <button id="btn-pack-gen" class="nav-btn">Packstück-Generator</button>
-            <button id="btn-q-calc" class="nav-btn">Q-Wert Rechner</button>
+            <button id="btn-pack-gen" class="nav-btn">Pack-Generator</button>
+            <button id="btn-q-calc" class="nav-btn">Q-Wert</button>
         </nav>
 
         <section id="section-single-check" class="app-section">
-            <h2>🔎 Sendungsprüfung</h2>
+            <div class="section-header">
+                <h2>🔎 Sendung prüfen</h2>
+                <p class="subtitle">Gefahrgut-Check für Luftfracht</p>
+            </div>
             
             <form id="form-single-check">
-                <div class="form-group">
-                    <label for="un-number">UN-Nummer:</label>
-                    <input type="text" id="un-number" placeholder="z.B. 2811" list="un-list">
-                    <datalist id="un-list"></datalist>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="un-number">UN-Nummer</label>
+                        <input type="text" id="un-number" placeholder="z.B. 2811" list="un-list">
+                        <datalist id="un-list"></datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="packing-group">Verpackungsgruppe</label>
+                        <select id="packing-group">
+                            <option value="">-- Wählen --</option>
+                            <option value="null">Keine (z.B. Batterien)</option>
+                            <option value="I">I (Hohe Gefahr)</option>
+                            <option value="II">II (Mittlere Gefahr)</option>
+                            <option value="III">III (Geringe Gefahr)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="packing-group">Verpackungsgruppe:</label>
-                    <select id="packing-group">
-                        <option value="">-- Bitte wählen --</option>
-                        <option value="null">Keine (z.B. Batterien/Gase)</option>
-                        <option value="I">I</option>
-                        <option value="II">II</option>
-                        <option value="III">III</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="net-qty">Netto-Menge:</label>
+                    <label for="net-qty">Netto-Menge</label>
                     <div class="input-wrapper">
                         <input type="number" id="net-qty" placeholder="0" step="0.000001">
                         <select id="qty-unit">
@@ -54,71 +66,79 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="action-btn">Prüfen</button>
+                <button type="submit" class="action-btn">Jetzt prüfen</button>
             </form>
-            <div id="result-container" class="hidden"></div>
+            <div id="result-container" class="hidden fade-in"></div>
         </section>
 
         <section id="section-pack-gen" class="app-section hidden">
-            <h2>📝 Packstück-Text Generator</h2>
-            <p class="info-text">Erstellt Text für "Nature and Quantity of Goods".</p>
+            <div class="section-header">
+                <h2>📝 Packstück-Generator</h2>
+                <p class="subtitle">Text für AWB / DGD erstellen</p>
+            </div>
             
             <div id="pkg-list"></div>
             
-            <button id="btn-add-pkg" class="secondary-btn">+ Verpackung hinzufügen</button>
+            <button id="btn-add-pkg" class="secondary-btn dashed">+ Verpackung hinzufügen</button>
             
-            <div class="form-group" style="margin-top:20px; background:#fff3cd; padding:10px; border-radius:4px;">
-                <label style="display:flex; align-items:center; cursor:pointer;">
-                    <input type="checkbox" id="overpack-check" style="width:20px; height:20px; margin-right:10px;">
-                    <strong>Overpack used</strong>
+            <div class="checkbox-card">
+                <label>
+                    <input type="checkbox" id="overpack-check">
+                    <span>Overpack used (Umverpackung)</span>
                 </label>
             </div>
             
             <button id="btn-gen-text" class="action-btn">Text generieren</button>
             
-            <div id="pkg-output-container" class="hidden" style="margin-top:20px;">
+            <div id="pkg-output-container" class="hidden fade-in output-box">
                 <label>Ergebnis:</label>
-                <textarea id="pkg-output-text" rows="5"></textarea>
-                <button id="btn-copy-text" class="secondary-btn" style="width:100%; background-color:#005c97; color:white;">📋 Kopieren</button>
+                <textarea id="pkg-output-text" rows="5" readonly></textarea>
+                <button id="btn-copy-text" class="copy-btn">Kopieren</button>
             </div>
         </section>
 
         <section id="section-q-calc" class="app-section hidden">
-            <h2>📦 Q-Wert Rechner</h2>
-            <p class="info-text">
-                Berechnung für "All packed in one". <br>
-                <em>Voraussetzung: Alle Stoffe müssen kompatibel sein (Segregation prüfen!).</em>
-            </p>
+            <div class="section-header">
+                <h2>📦 Q-Wert Rechner</h2>
+                <p class="subtitle">All packed in one (Mischverpackung)</p>
+            </div>
             
-            <div class="mode-switch">
-                <label><input type="radio" name="transport-mode" value="PAX" checked> Passenger (PAX)</label>
-                <label><input type="radio" name="transport-mode" value="CAO"> Cargo Only (CAO)</label>
+            <div class="mode-switch-container">
+                <div class="mode-switch">
+                    <input type="radio" id="mode-pax" name="transport-mode" value="PAX" checked>
+                    <label for="mode-pax">Passenger (PAX)</label>
+                    
+                    <input type="radio" id="mode-cao" name="transport-mode" value="CAO">
+                    <label for="mode-cao">Cargo Only (CAO)</label>
+                    <div class="slider"></div>
+                </div>
             </div>
             
             <div id="q-items-list"></div>
             
-            <button id="btn-add-item" class="secondary-btn">+ Weitere Position hinzufügen</button>
-            <button id="btn-calc-q" class="action-btn">Q-Wert berechnen</button>
+            <button id="btn-add-item" class="secondary-btn dashed">+ Position hinzufügen</button>
+            <button id="btn-calc-q" class="action-btn">Berechnen</button>
             
-            <div id="q-result" class="hidden"></div>
+            <div id="q-result" class="hidden fade-in"></div>
         </section>
 
     </main>
 
     <footer>
-        <p>&copy; 2024 DG Check</p>
+        <p>&copy; 2024 DG Check Pro</p>
     </footer>
 
     <div id="pi-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3 id="modal-title">Verpackungsanweisung</h3>
+            <div class="modal-header">
+                <h3 id="modal-title">Info</h3>
+                <span class="close-modal">&times;</span>
+            </div>
             <div id="modal-body"></div>
-            <button class="secondary-btn" style="margin-top:20px; width:100%;" onclick="closeModal()">Schließen</button>
         </div>
     </div>
 
     <script src="js/data-loader.js?v=5"></script>
-    <script src="js/app.js?v=5"></script>
+    <script src="js/app.js?v=modern"></script>
 </body>
 </html>

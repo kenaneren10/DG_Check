@@ -1,6 +1,10 @@
+/* * HAUPTLOGIK DG-CHECKER
+ * Version 2025 (Modern UI & Dark Mode)
+ */
+
 const dataLoader = new DataLoader();
 
-// LOKALE BILDER - Bitte Bilder in Ordner "img" speichern!
+// LOKALE BILDER - Bitte sicherstellen, dass die Bilder im Ordner "img" liegen!
 const HAZARD_LABELS = {
     "2.1": "img/class_2.1.png",
     "2.2": "img/class_2.2.png",
@@ -18,15 +22,48 @@ const HAZARD_LABELS = {
 };
 const LABEL_CAO = "img/cao.png";
 
+/* --- INITIALISIERUNG --- */
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    // 1. Dark Mode initialisieren (bevor Daten geladen werden, damit es nicht flackert)
+    initTheme();
+
+    // 2. Daten laden
     const success = await dataLoader.loadAllData();
     if (success) {
         fillUnDatalist();
         setupEventListeners();
-        addQItemRow();
-        addPkgRow();
+        addQItemRow(); // Erste Zeile Q-Rechner
+        addPkgRow();   // Erste Zeile Pack-Generator
     }
 });
+
+/* --- DARK MODE LOGIK --- */
+function initTheme() {
+    const currentTheme = localStorage.getItem('theme');
+    const toggleBtn = document.getElementById('theme-toggle');
+    const iconSpan = toggleBtn ? toggleBtn.querySelector('.icon') : null;
+
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark' && iconSpan) iconSpan.textContent = '☀️';
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                if(iconSpan) iconSpan.textContent = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                if(iconSpan) iconSpan.textContent = '☀️';
+            }
+        });
+    }
+}
 
 function fillUnDatalist() {
     const unList = document.getElementById('un-list');
@@ -39,26 +76,36 @@ function fillUnDatalist() {
 }
 
 function setupEventListeners() {
+    // Tabs
     document.getElementById('btn-single-check').addEventListener('click', () => switchTab('single'));
     document.getElementById('btn-q-calc').addEventListener('click', () => switchTab('q-calc'));
     document.getElementById('btn-pack-gen').addEventListener('click', () => switchTab('pack-gen'));
+
+    // Formulare & Buttons
     document.getElementById('form-single-check').addEventListener('submit', handleSingleCheck);
     document.getElementById('btn-add-item').addEventListener('click', addQItemRow);
     document.getElementById('btn-calc-q').addEventListener('click', calculateQValue);
     document.getElementById('btn-add-pkg').addEventListener('click', addPkgRow);
     document.getElementById('btn-gen-text').addEventListener('click', generatePkgText);
     document.getElementById('btn-copy-text').addEventListener('click', copyPkgText);
+
+    // Modal Events
     document.querySelector('.close-modal').addEventListener('click', closeModal);
     window.onclick = function(event) { if (event.target == document.getElementById('pi-modal')) closeModal(); }
 }
 
 function switchTab(mode) {
+    // Alle Sections ausblenden
     document.getElementById('section-single-check').classList.add('hidden');
     document.getElementById('section-q-calc').classList.add('hidden');
     document.getElementById('section-pack-gen').classList.add('hidden');
+    
+    // Buttons deaktivieren
     document.getElementById('btn-single-check').classList.remove('active');
     document.getElementById('btn-q-calc').classList.remove('active');
     document.getElementById('btn-pack-gen').classList.remove('active');
+
+    // Gewünschten Tab aktivieren
     if (mode === 'single') {
         document.getElementById('section-single-check').classList.remove('hidden');
         document.getElementById('btn-single-check').classList.add('active');
@@ -71,19 +118,21 @@ function switchTab(mode) {
     }
 }
 
-/* EINZEL-CHECK */
+/* --- LOGIK EINZEL-CHECK --- */
 function handleSingleCheck(event) {
     event.preventDefault(); 
+    
     const unNumber = document.getElementById('un-number').value.trim();
-    let packingGroupInput = document.getElementById('packing-group').value;
+    let packingGroupInput = document.getElementById('packing-group').value; 
     const netQtyInput = parseFloat(document.getElementById('net-qty').value);
     const unit = document.getElementById('qty-unit').value; 
     const resultContainer = document.getElementById('result-container');
+    
     resultContainer.classList.remove('hidden');
     resultContainer.innerHTML = ''; 
 
     if (!unNumber || packingGroupInput === "" || isNaN(netQtyInput)) {
-        resultContainer.innerHTML = '<p style="color:red;">❌ Bitte alle Felder ausfüllen.</p>';
+        resultContainer.innerHTML = '<p style="color:var(--danger);">❌ Bitte alle Felder (UN, PG, Menge) ausfüllen.</p>';
         return;
     }
 
@@ -92,37 +141,54 @@ function handleSingleCheck(event) {
 
     if (!entry) {
         let pgText = packingGroupSearch === null ? "ohne PG" : `PG ${packingGroupSearch}`;
-        resultContainer.innerHTML = `<p style="color:red;">❌ UN ${unNumber} (${pgText}) nicht gefunden.</p>`;
+        resultContainer.innerHTML = `<p style="color:var(--danger);">❌ UN ${unNumber} (${pgText}) nicht gefunden.</p>`;
         return;
     }
 
     if (entry.air_transport_forbidden) {
-        resultContainer.innerHTML = `<h3 style="background:red; color:white; padding:10px;">⛔ LUFTTRANSPORT VERBOTEN</h3>`;
+        resultContainer.innerHTML = `<h3 style="background:var(--danger); color:white; padding:10px; border-radius:var(--radius);">⛔ LUFTTRANSPORT VERBOTEN</h3>`;
         return;
     }
 
     let qtyInKg = (unit === 'g' || unit === 'ml') ? netQtyInput / 1000 : netQtyInput;
+
+    // Status prüfen
     let paxStatus = (!entry.is_forbidden_pax) && checkLimit(entry.pax_max_qty, qtyInKg);
     let caoStatus = (!entry.is_forbidden_cao) && checkLimit(entry.cao_max_qty, qtyInKg);
 
-    let lqText = "❌ Nicht erlaubt"; let lqColor = "red"; let lqPiLink = "-";
+    // LQ Text
+    let lqText = "❌ Nicht erlaubt";
+    let lqColor = "var(--danger)";
+    let lqPiLink = "-";
     if (entry.lq_allowed) {
-        if (entry.lq_max_qty && qtyInKg <= entry.lq_max_qty) { lqText = `✅ Möglich (Max ${entry.lq_max_qty} kg/L)`; lqColor = "green"; }
-        else { lqText = `⚠️ Zu hoch (Limit ${entry.lq_max_qty})`; lqColor = "#d9534f"; }
+        if (entry.lq_max_qty && qtyInKg <= entry.lq_max_qty) {
+            lqText = `✅ Möglich (Max. ${entry.lq_max_qty} kg/L)`;
+            lqColor = "var(--accent)";
+        } else {
+            lqText = `⚠️ Menge zu hoch (Limit: ${entry.lq_max_qty} kg/L)`;
+            lqColor = "#d97706"; // Orange
+        }
         lqPiLink = createPiLink(entry.lq_instruction);
     }
 
-    let dmText = "❌ Nicht erlaubt"; let dmColor = "red";
+    // De Minimis Text
+    let dmText = "❌ Nicht erlaubt";
+    let dmColor = "var(--danger)";
     if (entry.de_minimis_allowed) {
-        if (qtyInKg <= 0.1) { dmText = "✅ Möglich (Max 1g/1ml innen, 100g außen)"; dmColor = "green"; }
-        else { dmText = "⚠️ Zu hoch (> 100g)"; dmColor = "#d9534f"; }
+        if (qtyInKg <= 0.1) { 
+            dmText = "✅ Möglich (Max. 1g/1ml innen, 100g außen)";
+            dmColor = "var(--accent)";
+        } else {
+            dmText = "⚠️ Menge zu hoch (> 100g)";
+            dmColor = "#d97706"; 
+        }
     }
 
     const paxPiLink = createPiLink(entry.pax_instruction);
     const caoPiLink = createPiLink(entry.cao_instruction);
     let pgDisplay = entry.packing_group ? entry.packing_group : "-";
 
-    // BILDER
+    // --- BILDER ---
     let hazardImgHtml = "";
     if (HAZARD_LABELS[entry.class]) {
         hazardImgHtml += `<img src="${HAZARD_LABELS[entry.class]}" alt="Klasse ${entry.class}" style="height:80px; margin-right:10px;" onerror="this.style.display='none'">`;
@@ -131,49 +197,78 @@ function handleSingleCheck(event) {
         hazardImgHtml += `<img src="${LABEL_CAO}" alt="Cargo Only" style="height:80px;" onerror="this.style.display='none'">`;
     }
 
+    // HTML Aufbau
     let html = `
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px;">
-        <div><h3>Ergebnis für UN ${unNumber} (PG ${pgDisplay})</h3><p><strong>Name:</strong> ${entry.proper_shipping_name}</p></div>
-        <div style="text-align:right;">${hazardImgHtml}</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:15px;">
+        <div>
+            <h3>Ergebnis für UN ${unNumber} (PG ${pgDisplay})</h3>
+            <p style="color:var(--text-muted);"><strong>Offizieller Name:</strong> ${entry.proper_shipping_name}</p>
+        </div>
+        <div style="text-align:right;">
+            ${hazardImgHtml}
+        </div>
     </div>
-    <table border="1" style="width:100%; border-collapse:collapse; margin-top:10px;">
-        <tr style="background:#eee;"><th>Modus</th><th>Erlaubt?</th><th>Max. Menge / Pkg</th><th>Vorschrift (PI)</th></tr>
-        <tr><td>Passenger (PAX)</td><td style="color:${paxStatus ? 'green' : 'red'}"><strong>${paxStatus ? '✅ OK' : '❌ Verboten'}</strong></td><td>${entry.pax_max_qty} ${entry.pax_max_qty_unit}</td><td>${paxPiLink}</td></tr>
-        <tr><td>Cargo Only (CAO)</td><td style="color:${caoStatus ? 'green' : 'red'}"><strong>${caoStatus ? '✅ OK' : '❌ Verboten'}</strong></td><td>${entry.cao_max_qty} ${entry.cao_max_qty_unit}</td><td>${caoPiLink}</td></tr>
+    
+    <table style="width:100%; margin-top:10px;">
+        <tr style="background:var(--bg-input);"><th>Modus</th><th>Erlaubt?</th><th>Max. Menge / Pkg</th><th>Vorschrift (PI)</th></tr>
+        <tr>
+            <td>Passenger (PAX)</td>
+            <td style="color:${paxStatus ? 'var(--accent)' : 'var(--danger)'}"><strong>${paxStatus ? '✅ OK' : '❌ Verboten'}</strong></td>
+            <td>${entry.pax_max_qty} ${entry.pax_max_qty_unit}</td>
+            <td>${paxPiLink}</td>
+        </tr>
+        <tr>
+            <td>Cargo Only (CAO)</td>
+            <td style="color:${caoStatus ? 'var(--accent)' : 'var(--danger)'}"><strong>${caoStatus ? '✅ OK' : '❌ Verboten'}</strong></td>
+            <td>${entry.cao_max_qty} ${entry.cao_max_qty_unit}</td>
+            <td>${caoPiLink}</td>
+        </tr>
     </table>`;
 
     if (entry.special_provisions && entry.special_provisions.length > 0) {
-        html += `<h4>⚠️ Sonderbestimmungen:</h4><ul>`;
+        html += `<div style="margin-top:20px;"><h4>⚠️ Sonderbestimmungen:</h4><ul>`;
         entry.special_provisions.forEach(code => {
             const spInfo = dataLoader.getSpecialProvision(code);
             html += `<li><strong>${code}:</strong> ${spInfo ? spInfo.description : "Siehe Buch"}</li>`;
         });
-        html += `</ul>`;
+        html += `</ul></div>`;
     }
 
-    html += `<div style="margin-top:15px; font-size:0.9rem; color:#333; background:#f9f9f9; padding:10px; border:1px solid #ddd;">
-        <strong>Spezial-Optionen:</strong><br>EQ-Code: <strong>${entry.eq_code}</strong><br>LQ: <span style="color:${lqColor}"><strong>${lqText}</strong> (PI: ${lqPiLink})</span><br>De Minimis: <span style="color:${dmColor}"><strong>${dmText}</strong></span>
+    html += `<div style="margin-top:20px; font-size:0.9rem; background:var(--bg-input); padding:15px; border-radius:var(--radius); border:1px solid var(--border);">
+        <strong>Spezial-Optionen:</strong><br>
+        EQ-Code: <strong>${entry.eq_code}</strong><br>
+        Limited Quantity (LQ): <span style="color:${lqColor}"><strong>${lqText}</strong> (PI: ${lqPiLink})</span><br>
+        De Minimis: <span style="color:${dmColor}"><strong>${dmText}</strong></span>
     </div>`;
+
     resultContainer.innerHTML = html;
 }
 
+/* HILFSFUNKTIONEN */
 function checkLimit(maxLimit, currentQty) { return (maxLimit !== 0 && maxLimit !== null) ? currentQty <= maxLimit : false; }
-function createPiLink(piCode) { if (!piCode || piCode === "Verboten" || piCode === "0") return piCode || "-"; return `<span class="pi-link" onclick="openPiModal('${piCode}')">${piCode} ℹ️</span>`; }
+function createPiLink(piCode) {
+    if (!piCode || piCode === "Verboten" || piCode === "Forbidden" || piCode === "0") return piCode || "-";
+    return `<span class="pi-link" onclick="openPiModal('${piCode}')">${piCode} ℹ️</span>`;
+}
 window.openPiModal = function(piId) {
     const modal = document.getElementById('pi-modal');
     const piData = dataLoader.getPackingInstruction(piId);
     if (piData) {
         document.getElementById('modal-title').innerText = `Verpackungsanweisung ${piId} (${piData.mode})`;
-        document.getElementById('modal-body').innerHTML = `<p>${piData.description}</p>` + (piData.description.includes("Einzelverpackungen sind NICHT erlaubt") ? `<p style="color:red; font-weight:bold;">⚠️ ACHTUNG: Nur zusammengesetzte Verpackung erlaubt!</p>` : "");
+        let content = `<p>${piData.description}</p>`;
+        if (piData.description.includes("Einzelverpackungen sind NICHT erlaubt")) {
+             content += `<p style="color:var(--danger); font-weight:bold; margin-top:10px;">⚠️ ACHTUNG: Nur zusammengesetzte Verpackung erlaubt!</p>`;
+        }
+        document.getElementById('modal-body').innerHTML = content;
     } else {
         document.getElementById('modal-title').innerText = `PI ${piId}`;
-        document.getElementById('modal-body').innerHTML = `<p>Keine Details.</p>`;
+        document.getElementById('modal-body').innerHTML = `<p>Keine Details verfügbar.</p>`;
     }
     modal.classList.remove('hidden');
 }
 window.closeModal = function() { document.getElementById('pi-modal').classList.add('hidden'); }
 
-/* Q-WERT */
+/* Q-WERT RECHNER */
 function addQItemRow() {
     const list = document.getElementById('q-items-list');
     const div = document.createElement('div');
@@ -210,17 +305,17 @@ function calculateQValue() {
         let currentQtyKg = (unit === 'g' || unit === 'ml') ? qty / 1000 : qty;
         let q_part = currentQtyKg / maxQty;
         Q += q_part;
-        detailsHtml += `<li style="margin-bottom: 5px; border-bottom: 1px solid #eee;"><strong>UN ${un}:</strong> Rechnung: ${currentQtyKg} / ${maxQty} = <strong>${q_part.toFixed(4)}</strong></li>`;
+        detailsHtml += `<li style="margin-bottom: 5px; border-bottom: 1px solid var(--border); padding-bottom:5px;"><strong>UN ${un}:</strong> Rechnung: ${currentQtyKg} / ${maxQty} = <strong>${q_part.toFixed(4)}</strong></li>`;
     }
     if (error) return;
     let finalQ = Math.ceil(Q * 10) / 10; 
     resultBox.classList.remove('hidden');
-    let color = (finalQ <= 1.0) ? 'var(--success-green)' : 'var(--danger-red)';
+    let color = (finalQ <= 1.0) ? 'var(--accent)' : 'var(--danger)';
     let status = (finalQ <= 1.0) ? '✅ ERLAUBT' : '❌ NICHT ERLAUBT';
-    resultBox.innerHTML = `<h3>Q-Wert: ${finalQ.toFixed(1)}</h3><p style="color:${color}; font-size:1.2rem; font-weight:bold;">${status}</p>${detailsHtml}</ul>`;
+    resultBox.innerHTML = `<h3>Q-Wert: ${finalQ.toFixed(1)}</h3><p style="color:${color}; font-size:1.3rem; font-weight:bold;">${status}</p>${detailsHtml}</ul>`;
 }
 
-/* PACK-GENERATOR */
+/* PACKSTÜCK GENERATOR */
 function addPkgRow() {
     const list = document.getElementById('pkg-list');
     const div = document.createElement('div');

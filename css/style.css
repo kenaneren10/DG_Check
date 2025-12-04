@@ -1,389 +1,309 @@
-/* ==========================================================================
-   1. DESIGN TOKENS (FARBEN & VARIABLEN)
-   Hier zentral Änderungen vornehmen!
-   ========================================================================== */
+/* =========================================
+   1. MODERN UI VARIABLES (Light & Dark)
+   ========================================= */
 :root {
-    /* -- Markenfarben (Roche / Enterprise Style) -- */
-    --header-bg:        #354a5f;  /* Dunkles Grau-Blau für die Kopfzeile */
-    --brand-blue:       #0066cc;  /* Hauptfarbe für Buttons & Akzente */
-    --brand-blue-hover: #004c99;  /* Dunkleres Blau beim Drüberfahren */
-    
-    /* -- Statusfarben -- */
-    --success-green:    #258f38;  /* Grün für "Erlaubt" / "Kopiert" */
-    --danger-red:       #c0392b;  /* Rot für "Verboten" / "Löschen" */
-    --warning-bg:       #fff3cd;  /* Gelber Hintergrund für Warnungen */
-    
-    /* -- Text & Hintergrund -- */
-    --text-main:        #333333;  /* Haupttext (Dunkelgrau) */
-    --text-light:       #666666;  /* Labels & Nebentext */
-    --bg-body:          #f5f7fa;  /* Hintergrund der gesamten Seite */
-    --bg-card:          #ffffff;  /* Hintergrund der weißen Boxen */
-    --border-color:     #cccccc;  /* Rahmenfarbe für Eingabefelder */
-    
-    /* -- Formen & Schatten -- */
-    --radius:           3px;      /* Kleine Radien wirken technischer/professioneller */
-    --shadow:           0 1px 3px rgba(0,0,0,0.1); /* Dezent, nicht verspielt */
-    --font-stack:       Arial, Helvetica, sans-serif; /* Schnörkellose Systemschrift */
+    /* Light Mode (Standard) */
+    --bg-body: #f0f2f5;
+    --bg-card: #ffffff;
+    --bg-input: #f8f9fa;
+    --text-main: #1a1a1a;
+    --text-muted: #65676b;
+    --primary: #0066cc;         /* Roche Blau */
+    --primary-hover: #0052a3;
+    --accent: #10b981;          /* Modernes Grün */
+    --danger: #ef4444;          /* Modernes Rot */
+    --border: #e4e6eb;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --radius: 12px;             /* Rundere Ecken */
+    --font: 'Inter', sans-serif;
+    --header-bg: #ffffff;
+    --header-text: #1a1a1a;
 }
 
-/* ==========================================================================
-   2. GRUNDLAGEN (RESET)
-   ========================================================================== */
+/* Dark Mode Override */
+[data-theme="dark"] {
+    --bg-body: #121212;         /* Sehr dunkles Grau */
+    --bg-card: #1e1e1e;         /* Karten etwas heller */
+    --bg-input: #2c2c2c;
+    --text-main: #e4e6eb;       /* Fast Weiß */
+    --text-muted: #b0b3b8;
+    --primary: #3b82f6;         /* Helleres Blau für Kontrast */
+    --primary-hover: #60a5fa;
+    --accent: #34d399;
+    --danger: #f87171;
+    --border: #3e4042;
+    --shadow: 0 4px 12px rgba(0,0,0,0.4);
+    --header-bg: #1e1e1e;
+    --header-text: #ffffff;
+}
+
+/* =========================================
+   2. GLOBAL RESET & TYPO
+   ========================================= */
 body {
-    font-family: var(--font-stack);
+    font-family: var(--font);
     background-color: var(--bg-body);
     color: var(--text-main);
     margin: 0;
     padding: 0;
-    font-size: 14px; /* Standard Enterprise-Schriftgröße */
-    line-height: 1.5;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3 {
-    margin: 0 0 15px 0;
-    font-weight: normal; /* Weniger Fett wirkt moderner */
-    color: var(--text-main);
-}
+h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.5px; }
+.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
-/* ==========================================================================
-   3. HEADER & LOGO
-   ========================================================================== */
+/* =========================================
+   3. HEADER (Modern)
+   ========================================= */
 header {
     background-color: var(--header-bg);
     padding: 15px 20px;
-    border-bottom: 4px solid var(--brand-blue); /* Die typische Farbliene */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background-color 0.3s ease;
+}
+
+.header-inner {
+    max-width: 800px;
+    margin: 0 auto;
     display: flex;
-    justify-content: center; /* Zentriert den Inhalt */
+    justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.header-content {
-    width: 100%;
-    max-width: 960px; /* Gleiche Breite wie der Hauptinhalt */
-    text-align: left; /* Logo steht linksbündig im Container */
-}
+.app-logo { height: 45px; width: auto; }
 
-.app-logo {
-    max-height: 50px; /* Begrenzt die Logo-Größe */
-    width: auto;
-    display: block;
+/* Toggle Button */
+.icon-btn {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
 }
+.icon-btn:hover { transform: scale(1.1); }
 
-/* ==========================================================================
-   4. LAYOUT (MAIN CONTAINER)
-   ========================================================================== */
+/* =========================================
+   4. LAYOUT & CARDS
+   ========================================= */
 main {
-    max-width: 960px;
-    margin: 30px auto; /* Abstand nach oben/unten */
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+.app-section {
     background: var(--bg-card);
     padding: 30px;
-    border: 1px solid #dedede;
-    box-shadow: var(--shadow);
     border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    animation: fadeIn 0.4s ease-out;
 }
 
-/* ==========================================================================
-   5. NAVIGATION (TABS)
-   ========================================================================== */
+.section-header { margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+
+/* =========================================
+   5. NAVIGATION (Pills Style)
+   ========================================= */
 .app-nav {
     display: flex;
-    gap: 5px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 25px;
-    background-color: #f9f9f9; /* Leichter Hintergrund für die Leiste */
-    padding: 0 10px;
-    flex-wrap: wrap; /* Wichtig für Handy: Umbruch erlauben */
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 
 .nav-btn {
-    background: transparent;
-    border: none;
-    padding: 12px 20px;
-    font-size: 0.9rem;
-    color: var(--text-light);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 50px; /* Pillen-Form */
+    font-weight: 600;
+    color: var(--text-muted);
     cursor: pointer;
-    border-bottom: 3px solid transparent;
-    font-weight: bold;
     transition: all 0.2s;
-    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.nav-btn:hover {
-    color: var(--brand-blue);
-    background-color: #eef;
-}
+.nav-btn:hover { color: var(--primary); transform: translateY(-1px); }
 
-/* Der aktive Tab */
 .nav-btn.active {
-    color: var(--brand-blue);
-    border-bottom: 3px solid var(--brand-blue);
-    background-color: #fff;
-    border-radius: var(--radius) var(--radius) 0 0;
+    background-color: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
 }
 
-/* ==========================================================================
-   6. FORMULARE & EINGABEN
-   ========================================================================== */
-.form-group {
-    margin-bottom: 20px;
-}
+/* =========================================
+   6. INPUTS & FORMS
+   ========================================= */
+.form-group { margin-bottom: 20px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } /* 2 Spalten Layout */
 
 label {
     display: block;
     font-size: 0.85rem;
-    font-weight: bold;
-    color: var(--text-light);
-    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 8px;
 }
 
-/* Einheitlicher Look für Inputs, Selects und Textareas */
-input[type="text"], 
-input[type="number"], 
-select, 
-textarea {
+input, select, textarea {
     width: 100%;
-    padding: 8px 10px;
-    font-size: 0.95rem;
-    border: 1px solid var(--border-color);
-    background-color: #fff;
-    border-radius: var(--radius);
+    padding: 12px 15px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-main);
     box-sizing: border-box;
-    font-family: var(--font-stack);
-    transition: border-color 0.2s;
+    transition: all 0.2s;
 }
 
-/* Fokus-Effekt (Blaue Umrandung wie in SAP) */
-input:focus, select:focus, textarea:focus {
+input:focus, select:focus {
     outline: none;
-    border-color: var(--brand-blue);
-    box-shadow: 0 0 0 1px var(--brand-blue);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+    background: var(--bg-card);
 }
 
-/* Spezial: Menge + Einheit nebeneinander */
-.input-wrapper {
-    display: flex;
-    gap: -1px; /* Ränder überlappen lassen für sauberen Look */
-}
+.input-wrapper { display: flex; gap: 10px; }
+.input-wrapper input { flex: 2; }
+.input-wrapper select { flex: 1; }
 
-.input-wrapper input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    flex: 4; /* Input nimmt mehr Platz */
-}
-
-.input-wrapper select {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: none; /* Doppelten Rahmen vermeiden */
-    flex: 1;
-    background-color: #f9f9f9;
-    font-weight: 500;
-}
-
-/* ==========================================================================
+/* =========================================
    7. BUTTONS
-   ========================================================================== */
-button {
-    font-family: var(--font-stack);
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: background-color 0.2s;
-}
+   ========================================= */
+button { font-family: var(--font); border: none; cursor: pointer; }
 
-/* Haupt-Aktion (Blau) */
 .action-btn {
     width: 100%;
-    padding: 12px;
-    background-color: var(--brand-blue);
-    color: #fff;
-    border: 1px solid var(--brand-blue-hover);
-    font-size: 1rem;
-    font-weight: bold;
-    margin-top: 20px;
+    padding: 14px;
+    background-color: var(--primary);
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 10px;
 }
 
-.action-btn:hover {
-    background-color: var(--brand-blue-hover);
-}
+.action-btn:hover { background-color: var(--primary-hover); }
+.action-btn:active { transform: scale(0.98); }
 
-/* Sekundär-Aktion (Weiß/Grau) */
 .secondary-btn {
-    background-color: #fff;
+    background: var(--bg-input);
     color: var(--text-main);
-    border: 1px solid #ccc;
+    border: 1px solid var(--border);
     padding: 8px 15px;
-    font-size: 0.85rem;
-    margin: 5px 0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.secondary-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+/* Dashed Button für "Hinzufügen" */
+.dashed {
+    width: 100%;
+    border: 2px dashed var(--border);
+    background: transparent;
+    margin: 15px 0;
 }
 
-.secondary-btn:hover {
-    background-color: #f0f0f0;
-    border-color: #bbb;
-}
-
-/* Löschen-Button (Klein & Rot) */
-.btn-delete {
-    background-color: transparent;
-    color: var(--danger-red);
-    border: 1px solid var(--danger-red);
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-delete:hover {
-    background-color: var(--danger-red);
-    color: #fff;
-}
-
-/* ==========================================================================
-   8. LISTEN & TABELLEN
-   ========================================================================== */
-/* Zeilen für Q-Rechner und Pack-Generator */
+/* =========================================
+   8. DYNAMISCHE LISTEN & ERGEBNISSE
+   ========================================= */
 .pkg-row, .q-row {
+    background: var(--bg-input);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: flex-end;
-    background-color: #fbfbfb;
-    border: 1px solid #eee;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: var(--radius);
-}
-
-.pkg-row > div, .q-row > div {
-    flex: 1;
-    min-width: 100px; /* Mindestbreite auf Handys */
-}
-
-/* Ergebnistabellen */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    border: 1px solid #ddd;
-}
-
-th {
-    background-color: #f0f3f5;
-    color: #333;
-    font-weight: bold;
-    text-align: left;
-    padding: 10px;
-    border-bottom: 2px solid #ddd;
-}
-
-td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-}
-
-/* ==========================================================================
-   9. ERGEBNIS-BOXEN
-   ========================================================================== */
-#result-container, #q-result, #pkg-output-container {
-    margin-top: 30px;
-    padding: 25px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-left: 5px solid var(--brand-blue); /* Akzent-Linie links */
-    border-radius: var(--radius);
     animation: fadeIn 0.3s ease;
 }
+.pkg-row > div, .q-row > div { flex: 1; min-width: 100px; }
+.btn-delete { background: #fee2e2; color: #dc2626; width: 36px; height: 36px; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-weight:bold;}
+.btn-delete:hover { background: #fecaca; }
 
-.info-text {
-    font-size: 0.9rem;
-    color: #555;
-    background: #f8f9fa;
-    padding: 15px;
-    border: 1px solid #e2e2e2;
-    margin-bottom: 20px;
+/* Ergebnis Boxen */
+#result-container, #q-result, .output-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: var(--bg-input); /* Leichte Abhebung */
     border-radius: var(--radius);
+    border-left: 4px solid var(--primary);
 }
 
-/* ==========================================================================
-   10. MODAL (POP-UP FENSTER)
-   ========================================================================== */
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th { text-align: left; color: var(--text-muted); font-size: 0.85rem; border-bottom: 2px solid var(--border); padding: 10px; }
+td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+/* =========================================
+   9. MODAL & SWITCHES
+   ========================================= */
+/* Mode Switch (Pax/Cargo) als Toggle */
+.mode-switch-container { display: flex; justify-content: center; margin-bottom: 20px; }
+.mode-switch {
+    background: var(--bg-input);
+    padding: 4px;
+    border-radius: 50px;
+    display: inline-flex;
+    border: 1px solid var(--border);
+    position: relative;
+}
+.mode-switch input { display: none; }
+.mode-switch label {
+    padding: 8px 20px;
+    cursor: pointer;
+    z-index: 2;
+    margin: 0;
+    border-radius: 50px;
+    transition: color 0.3s;
+}
+.mode-switch input:checked + label { color: white; background: var(--primary); }
+
+/* Modal */
 .modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Abdunklung */
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(2px); /* Milchglas-Effekt */
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+    display: flex; justify-content: center; align-items: center; z-index: 1000;
 }
-
 .modal-content {
-    background-color: #fff;
-    width: 600px;
-    max-width: 90%; /* Responsive */
-    max-height: 80vh;
-    overflow-y: auto; /* Scrollen bei viel Text */
-    padding: 30px;
-    border-radius: var(--radius);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    border-top: 5px solid var(--brand-blue);
+    background: var(--bg-card);
+    width: 90%; max-width: 550px;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
+.close-modal { font-size: 24px; cursor: pointer; color: var(--text-muted); }
 
-#modal-title {
-    margin-top: 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-    color: var(--brand-blue);
-    font-size: 1.3rem;
-}
+/* Link Style */
+.pi-link { color: var(--primary); font-weight: 600; text-decoration: none; border-bottom: 1px dotted currentColor; cursor: pointer; }
 
-.close-modal {
-    float: right;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #aaa;
-    cursor: pointer;
-    line-height: 0.8;
-}
+/* =========================================
+   10. ANIMATIONEN & MEDIA
+   ========================================= */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-.close-modal:hover { color: #333; }
-
-/* Klickbare Links (PI-Nummern) */
-.pi-link {
-    color: var(--brand-blue);
-    text-decoration: none;
-    font-weight: bold;
-    cursor: pointer;
-    border-bottom: 1px dotted var(--brand-blue);
-}
-
-.pi-link:hover {
-    background-color: #e3f2fd;
-    text-decoration: none;
-    border-bottom: 1px solid var(--brand-blue);
-}
-
-/* ==========================================================================
-   11. HELPER & FOOTER
-   ========================================================================== */
 .hidden { display: none !important; }
 
-footer {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #999;
-    margin-top: 50px;
-    padding-bottom: 30px;
-}
-
-/* Sanftes Einblenden */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
 }
