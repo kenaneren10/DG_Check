@@ -1,0 +1,44 @@
+[
+  {
+    "eq_code": "E0",
+    "max_inner_qty": 0,
+    "max_outer_qty": 0,
+    "unit": "g/ml",
+    "description": "Nicht zugelassen als freigestellte Mengen (Not permitted)."
+  },
+  {
+    "eq_code": "E1",
+    "max_inner_qty": 30,
+    "max_outer_qty": 1000,
+    "unit": "g/ml",
+    "description": "Max. 30g/30ml je Innenverpackung, Max. 1kg/1L je Außenverpackung."
+  },
+  {
+    "eq_code": "E2",
+    "max_inner_qty": 30,
+    "max_outer_qty": 500,
+    "unit": "g/ml",
+    "description": "Max. 30g/30ml je Innenverpackung, Max. 500g/500ml je Außenverpackung."
+  },
+  {
+    "eq_code": "E3",
+    "max_inner_qty": 30,
+    "max_outer_qty": 300,
+    "unit": "g/ml",
+    "description": "Max. 30g/30ml je Innenverpackung, Max. 300g/300ml je Außenverpackung."
+  },
+  {
+    "eq_code": "E4",
+    "max_inner_qty": 1,
+    "max_outer_qty": 500,
+    "unit": "g/ml",
+    "description": "Max. 1g/1ml je Innenverpackung, Max. 500g/500ml je Außenverpackung."
+  },
+  {
+    "eq_code": "E5",
+    "max_inner_qty": 1,
+    "max_outer_qty": 300,
+    "unit": "g/ml",
+    "description": "Max. 1g/1ml je Innenverpackung, Max. 300g/300ml je Außenverpackung."
+  }
+]

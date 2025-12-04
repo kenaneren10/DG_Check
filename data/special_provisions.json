@@ -1,0 +1,112 @@
+[
+  {
+    "code": "A3",
+    "description": "Wenn chemische/physikalische Eigenschaften zeigen, dass der Stoff nicht den Kriterien der Klasse/Unterklasse entspricht, unterliegt er nicht diesen Vorschriften.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A4",
+    "description": "Flüssige Stoffe mit Inhalationstoxizität (PG I): VERBOTEN auf Passagier- und Frachtflugzeugen (Dämpfe). Bei Nebeln: Nur auf Frachtflugzeugen (CAO) erlaubt (max. 5L/Versandstück). Q-Wert Berechnung beachten!",
+    "impact_type": "warning"
+  },
+  {
+    "code": "A5",
+    "description": "Feste Stoffe mit Inhalationstoxizität (PG I): VERBOTEN auf Passagierflugzeugen. Auf Frachtflugzeugen (CAO) erlaubt (max. 15 kg/Versandstück). Q-Wert Berechnung beachten!",
+    "impact_type": "warning"
+  },
+  {
+    "code": "A48",
+    "description": "Verpackungsprüfungen sind nicht erforderlich.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A58",
+    "description": "Wässrige Lösung mit höchstens 24 Vol.-% Alkohol unterliegt nicht diesen Vorschriften (kein Gefahrgut).",
+    "impact_type": "success"
+  },
+  {
+    "code": "A69",
+    "description": "Artikel mit Quecksilber/Gallium/Inertgas (z.B. Thermometer, Schalter) sind als Fracht freigestellt, wenn Menge gering (<1g Gas, <15g Quecksilber) und sicher verpackt. 'Not Restricted' im Luftfrachtbrief angeben.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A88",
+    "description": "Prototypen-Batterien (nicht geprüft nach UN 38.3) oder Kleinserien (<100 Stk.): Nur CAO mit behördlicher Genehmigung (Abgangsstaat + Staat des Luftfahrtunternehmens). PI 910 im Luftfrachtbrief angeben.",
+    "impact_type": "warning"
+  },
+  {
+    "code": "A97",
+    "description": "Für umweltgefährdende Stoffe, die keiner anderen Klasse entsprechen. Gilt auch für Abfälle nach Basler Abkommen.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A99",
+    "description": "Lithium-Batterien > 35 kg: Nur CAO mit Genehmigung (Behörde Abgangsstaat + Staat Luftfahrtunternehmen). PI 974 angeben.",
+    "impact_type": "warning"
+  },
+  {
+    "code": "A137",
+    "description": "Darf nicht für Stoffe verwendet werden, die Inhalationstoxizität PG I Kriterien erfüllen (siehe 3.6.1.5.3.2).",
+    "impact_type": "warning"
+  },
+  {
+    "code": "A154",
+    "description": "Defekte oder beschädigte Lithium-Batterien (Sicherheitsrisiko, Hitze, Feuer, Kurzschluss) sind VERBOTEN.",
+    "impact_type": "danger"
+  },
+  {
+    "code": "A158",
+    "description": "Gemische mit umweltgefährdenden Stoffen müssen UN 3077/3082 zugeordnet werden. Wenn <10ml/10g in festem Stoff absorbiert (dicht verschlossen), dann freigestellt.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A179",
+    "description": "Für UN 3077: IBCs (Großpackmittel) bis 1000 kg erlaubt (siehe PI 956).",
+    "impact_type": "info"
+  },
+  {
+    "code": "A180",
+    "description": "Nicht-ansteckungsgefährliche Proben mit kleinen Mengen Alkohol/Formaldehyd (<30ml): Freigestellt, wenn sicher verpackt (drei Schichten, hitzeversiegelt). Markierung: 'scientific research specimens, not restricted...'.",
+    "impact_type": "success"
+  },
+  {
+    "code": "A181",
+    "description": "Kombination von 'Packed with' und 'Contained in': Alle Teile der PIs müssen erfüllt sein. Markierung/Doku muss beide UN-Nummern nennen (z.B. UN 3091 + UN 3481).",
+    "impact_type": "warning"
+  },
+  {
+    "code": "A185",
+    "description": "Fahrzeuge mit reinem Lithium-Antrieb müssen UN 3556/3557/3558 zugeordnet werden. Batterien in Güterbeförderungseinheiten (nur externe Energie) = UN 3536.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A197",
+    "description": "Umweltgefährdende Stoffe (UN 3077/3082) in Einzel-/Innenverpackungen <= 5 L/5 kg sind von den meisten Vorschriften befreit (außer allgemeine Verpackungsanforderungen).",
+    "impact_type": "success"
+  },
+  {
+    "code": "A202",
+    "description": "Strahlungsdetektoren mit Gas (nicht nachfüllbar): Erlaubt, wenn Druck < 50 bar, < 12 L Volumen, Berstdruck geprüft. Falltest 1,2m erforderlich.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A213",
+    "description": "Batterien mit Lithium-Metall-Primärzellen UND wiederaufladbaren Ionen-Zellen: UN 3090 oder 3091 zuordnen. Limits beachten (Metall < 1,5g, Ionen < 10Wh).",
+    "impact_type": "info"
+  },
+  {
+    "code": "A215",
+    "description": "Technischer Name für UN 3077/3082 darf ein fettgedruckter Name aus Tabelle 4.2 sein (ohne n.a.g./Stern), z.B. 'Farbe' oder 'Parfümerieerzeugnisse'.",
+    "impact_type": "info"
+  },
+  {
+    "code": "A220",
+    "description": "Versandstücke mit COVID-19 Pharmazeutika + Datenlogger/Tracker (Lithium): Keine Markierung/Doku nach Teil II PI 967/970 nötig.",
+    "impact_type": "success"
+  },
+  {
+    "code": "A802",
+    "description": "Muss in UN-Spezifikationsverpackung (PG II Performance) verpackt sein, auch wenn keine PG in Spalte E steht. Ausnahme: Begrenzte Mengen oder Batterien Teil IB.",
+    "impact_type": "warning"
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "200",
+    "mode": "PAX/CAO",
+    "description": "<strong>Gase (Verdichtet/Verflüssigt)</strong><br>- Flaschen müssen UN-Norm oder ISO entsprechen.<br>- Ventilschutz (Kappe/Kragen) zwingend erforderlich.<br>- Flaschen müssen gegen Verrutschen gesichert sein.<br>- Prüffristen beachten (meist 10 Jahre)."
+  },
+  {
+    "id": "353",
+    "mode": "PAX",
+    "description": "<strong>Entzündbare Flüssigkeiten, PG II (Passagier)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Nur zusammengesetzte Verpackungen.<br>- Max. 5 L pro Versandstück (bei Glas innen max. 1L, Metall 5L)."
+  },
+  {
+    "id": "364",
+    "mode": "CAO",
+    "description": "<strong>Entzündbare Flüssigkeiten, PG II (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 60 L pro Versandstück."
+  },
+  {
+    "id": "Y341",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Entzündbare Flüssigkeiten PG II.<br>- Max. 1 L netto pro Versandstück.<br>- Keine UN-Verpackung nötig, aber Falltest 1,2m."
+  },
+  {
+    "id": "355",
+    "mode": "PAX",
+    "description": "<strong>Entzündbare Flüssigkeiten, PG III (Passagier)</strong><br>- Einzelverpackungen sind ERLAUBT (z.B. Fässer/Kanister).<br>- Max. 60 L pro Versandstück.<br>- Zusammengesetzt: Glas max. 2.5L innen, Metall 10L innen."
+  },
+  {
+    "id": "366",
+    "mode": "CAO",
+    "description": "<strong>Entzündbare Flüssigkeiten, PG III (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 220 L pro Versandstück."
+  },
+  {
+    "id": "Y344",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Entzündbare Flüssigkeiten PG III.<br>- Max. 10 L netto pro Versandstück.<br>- Max. 30 kg brutto."
+  },
+  {
+    "id": "652",
+    "mode": "PAX",
+    "description": "<strong>Giftige Flüssigkeiten, PG I (Passagier)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Max. 1 L pro Versandstück.<br>- Innenverpackungen in starren, dichten Zwischenbehälter mit Saugmaterial."
+  },
+  {
+    "id": "658",
+    "mode": "CAO",
+    "description": "<strong>Giftige Flüssigkeiten, PG I (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 30 L pro Versandstück.<br>- Saugmaterial erforderlich."
+  },
+  {
+    "id": "654",
+    "mode": "PAX",
+    "description": "<strong>Giftige Flüssigkeiten, PG II (Passagier)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Max. 5 L pro Versandstück.<br>- Zusammengesetzte Verpackung erforderlich."
+  },
+  {
+    "id": "662",
+    "mode": "CAO",
+    "description": "<strong>Giftige Flüssigkeiten, PG II (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 60 L pro Versandstück."
+  },
+  {
+    "id": "Y641",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Giftige Flüssigkeiten PG II.<br>- Max. 1 L netto pro Versandstück.<br>- Keine UN-Verpackung, Falltest 1,2m."
+  },
+  {
+    "id": "655",
+    "mode": "PAX",
+    "description": "<strong>Giftige Flüssigkeiten, PG III (Passagier)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 60 L pro Versandstück."
+  },
+  {
+    "id": "663",
+    "mode": "CAO",
+    "description": "<strong>Giftige Flüssigkeiten, PG III (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 220 L pro Versandstück."
+  },
+  {
+    "id": "Y642",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Giftige Flüssigkeiten PG III.<br>- Max. 2 L netto pro Versandstück.<br>- Max. 30 kg brutto."
+  },
+  {
+    "id": "666",
+    "mode": "PAX",
+    "description": "<strong>Giftige Feststoffe, PG I (Passagier)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Max. 5 kg pro Versandstück.<br>- UN-geprüfte Außenverpackung erforderlich (PG I)."
+  },
+  {
+    "id": "673",
+    "mode": "CAO",
+    "description": "<strong>Giftige Feststoffe, PG I (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Max. 50 kg pro Versandstück.<br>- UN-geprüfte Außenverpackung erforderlich (PG I)."
+  },
+  {
+    "id": "669",
+    "mode": "PAX",
+    "description": "<strong>Giftige Feststoffe, PG II (Passagier)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Max. 25 kg pro Versandstück.<br>- Innenverpackung: Glas (1kg), Metall (2.5kg), Kunststoff (2.5kg)."
+  },
+  {
+    "id": "676",
+    "mode": "CAO",
+    "description": "<strong>Giftige Feststoffe, PG II (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind NICHT erlaubt!<br>- Max. 100 kg pro Versandstück."
+  },
+  {
+    "id": "Y644",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Für giftige Feststoffe PG II.<br>- Max. 1 kg pro Versandstück.<br>- Keine UN-Spezifikationsverpackung nötig (aber Falltest 1,2m)."
+  },
+  {
+    "id": "670",
+    "mode": "PAX",
+    "description": "<strong>Giftige Feststoffe, PG III (Passagier)</strong><br>- Einzelverpackungen sind ERLAUBT (mit Auskleidung).<br>- Max. 100 kg pro Versandstück.<br>- Zusammengesetzte Verpackungen: Max. 5-10kg je Innenverpackung."
+  },
+  {
+    "id": "677",
+    "mode": "CAO",
+    "description": "<strong>Giftige Feststoffe, PG III (Nur Frachtflugzeug)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Max. 200 kg pro Versandstück."
+  },
+  {
+    "id": "Y645",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Für giftige Feststoffe PG III.<br>- Max. 10 kg pro Versandstück."
+  },
+  {
+    "id": "956",
+    "mode": "PAX/CAO",
+    "description": "<strong>Verschiedene gefährliche Güter (UN 3077/1841 etc.)</strong><br>- Einzelverpackungen sind ERLAUBT.<br>- Pappe/Holz/Kunststoff muss Auskleidung haben.<br>- Max. 400 kg pro Versandstück.<br>- IBCs (Großpackmittel) bis 1000 kg erlaubt."
+  },
+  {
+    "id": "Y956",
+    "mode": "PAX",
+    "description": "<strong>Begrenzte Mengen (Limited Quantity)</strong><br>- Umweltgefährdend.<br>- Max. 30 kg (Brutto) pro Versandstück."
+  },
+  {
+    "id": "966",
+    "mode": "PAX/CAO",
+    "description": "<strong>Lithium-Ionen MIT Ausrüstung (UN 3481)</strong><br>Teil I (>100Wh): UN-Verpackung PG II, max. 5kg (PAX).<br>Teil II (<=100Wh): Starke Verpackung, 1.2m Falltest, max. 5kg, keine DGD."
+  },
+  {
+    "id": "967",
+    "mode": "PAX/CAO",
+    "description": "<strong>Lithium-Ionen IN Ausrüstung (UN 3481)</strong><br>Teil I (>100Wh): UN-Verpackung PG II, gegen Einschalten sichern.<br>Teil II (<=100Wh): Starke Verpackung, max. 5kg."
+  },
+  {
+    "id": "969",
+    "mode": "PAX/CAO",
+    "description": "<strong>Lithium-Metall MIT Ausrüstung (UN 3091)</strong><br>Teil I (>2g Li): UN-Verpackung PG II, max. 5kg (PAX).<br>Teil II (<=2g Li): Starke Verpackung, 1.2m Falltest, max. 5kg."
+  },
+  {
+    "id": "970",
+    "mode": "PAX/CAO",
+    "description": "<strong>Lithium-Metall IN Ausrüstung (UN 3091)</strong><br>Teil I (>2g Li): UN-Verpackung PG II, gegen Einschalten sichern.<br>Teil II (<=2g Li): Starke Verpackung, max. 5kg."
+  },
+  {
+    "id": "650",
+    "mode": "PAX/CAO",
+    "description": "<strong>Biologische Stoffe, Kategorie B (UN 3373)</strong><br>- P650 Verpackung erforderlich (3 Komponenten).<br>- Primärgefäß & Sekundärverpackung flüssigkeitsdicht + 95kPa druckfest.<br>- Saugmaterial nötig.<br>- Außenverpackung starr (mind. 100x100mm).<br>- Markierung 'Biological Substance, Category B'."
+  }
+]

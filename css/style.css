@@ -1,0 +1,389 @@
+/* ==========================================================================
+   1. DESIGN TOKENS (FARBEN & VARIABLEN)
+   Hier zentral Änderungen vornehmen!
+   ========================================================================== */
+:root {
+    /* -- Markenfarben (Roche / Enterprise Style) -- */
+    --header-bg:        #354a5f;  /* Dunkles Grau-Blau für die Kopfzeile */
+    --brand-blue:       #0066cc;  /* Hauptfarbe für Buttons & Akzente */
+    --brand-blue-hover: #004c99;  /* Dunkleres Blau beim Drüberfahren */
+    
+    /* -- Statusfarben -- */
+    --success-green:    #258f38;  /* Grün für "Erlaubt" / "Kopiert" */
+    --danger-red:       #c0392b;  /* Rot für "Verboten" / "Löschen" */
+    --warning-bg:       #fff3cd;  /* Gelber Hintergrund für Warnungen */
+    
+    /* -- Text & Hintergrund -- */
+    --text-main:        #333333;  /* Haupttext (Dunkelgrau) */
+    --text-light:       #666666;  /* Labels & Nebentext */
+    --bg-body:          #f5f7fa;  /* Hintergrund der gesamten Seite */
+    --bg-card:          #ffffff;  /* Hintergrund der weißen Boxen */
+    --border-color:     #cccccc;  /* Rahmenfarbe für Eingabefelder */
+    
+    /* -- Formen & Schatten -- */
+    --radius:           3px;      /* Kleine Radien wirken technischer/professioneller */
+    --shadow:           0 1px 3px rgba(0,0,0,0.1); /* Dezent, nicht verspielt */
+    --font-stack:       Arial, Helvetica, sans-serif; /* Schnörkellose Systemschrift */
+}
+
+/* ==========================================================================
+   2. GRUNDLAGEN (RESET)
+   ========================================================================== */
+body {
+    font-family: var(--font-stack);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    font-size: 14px; /* Standard Enterprise-Schriftgröße */
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    margin: 0 0 15px 0;
+    font-weight: normal; /* Weniger Fett wirkt moderner */
+    color: var(--text-main);
+}
+
+/* ==========================================================================
+   3. HEADER & LOGO
+   ========================================================================== */
+header {
+    background-color: var(--header-bg);
+    padding: 15px 20px;
+    border-bottom: 4px solid var(--brand-blue); /* Die typische Farbliene */
+    display: flex;
+    justify-content: center; /* Zentriert den Inhalt */
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    width: 100%;
+    max-width: 960px; /* Gleiche Breite wie der Hauptinhalt */
+    text-align: left; /* Logo steht linksbündig im Container */
+}
+
+.app-logo {
+    max-height: 50px; /* Begrenzt die Logo-Größe */
+    width: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   4. LAYOUT (MAIN CONTAINER)
+   ========================================================================== */
+main {
+    max-width: 960px;
+    margin: 30px auto; /* Abstand nach oben/unten */
+    background: var(--bg-card);
+    padding: 30px;
+    border: 1px solid #dedede;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+}
+
+/* ==========================================================================
+   5. NAVIGATION (TABS)
+   ========================================================================== */
+.app-nav {
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 25px;
+    background-color: #f9f9f9; /* Leichter Hintergrund für die Leiste */
+    padding: 0 10px;
+    flex-wrap: wrap; /* Wichtig für Handy: Umbruch erlauben */
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-weight: bold;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.nav-btn:hover {
+    color: var(--brand-blue);
+    background-color: #eef;
+}
+
+/* Der aktive Tab */
+.nav-btn.active {
+    color: var(--brand-blue);
+    border-bottom: 3px solid var(--brand-blue);
+    background-color: #fff;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* ==========================================================================
+   6. FORMULARE & EINGABEN
+   ========================================================================== */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+
+/* Einheitlicher Look für Inputs, Selects und Textareas */
+input[type="text"], 
+input[type="number"], 
+select, 
+textarea {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    background-color: #fff;
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    font-family: var(--font-stack);
+    transition: border-color 0.2s;
+}
+
+/* Fokus-Effekt (Blaue Umrandung wie in SAP) */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 1px var(--brand-blue);
+}
+
+/* Spezial: Menge + Einheit nebeneinander */
+.input-wrapper {
+    display: flex;
+    gap: -1px; /* Ränder überlappen lassen für sauberen Look */
+}
+
+.input-wrapper input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 4; /* Input nimmt mehr Platz */
+}
+
+.input-wrapper select {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none; /* Doppelten Rahmen vermeiden */
+    flex: 1;
+    background-color: #f9f9f9;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   7. BUTTONS
+   ========================================================================== */
+button {
+    font-family: var(--font-stack);
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: background-color 0.2s;
+}
+
+/* Haupt-Aktion (Blau) */
+.action-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--brand-blue);
+    color: #fff;
+    border: 1px solid var(--brand-blue-hover);
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.action-btn:hover {
+    background-color: var(--brand-blue-hover);
+}
+
+/* Sekundär-Aktion (Weiß/Grau) */
+.secondary-btn {
+    background-color: #fff;
+    color: var(--text-main);
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    margin: 5px 0;
+}
+
+.secondary-btn:hover {
+    background-color: #f0f0f0;
+    border-color: #bbb;
+}
+
+/* Löschen-Button (Klein & Rot) */
+.btn-delete {
+    background-color: transparent;
+    color: var(--danger-red);
+    border: 1px solid var(--danger-red);
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-delete:hover {
+    background-color: var(--danger-red);
+    color: #fff;
+}
+
+/* ==========================================================================
+   8. LISTEN & TABELLEN
+   ========================================================================== */
+/* Zeilen für Q-Rechner und Pack-Generator */
+.pkg-row, .q-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+    background-color: #fbfbfb;
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: var(--radius);
+}
+
+.pkg-row > div, .q-row > div {
+    flex: 1;
+    min-width: 100px; /* Mindestbreite auf Handys */
+}
+
+/* Ergebnistabellen */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f0f3f5;
+    color: #333;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+}
+
+/* ==========================================================================
+   9. ERGEBNIS-BOXEN
+   ========================================================================== */
+#result-container, #q-result, #pkg-output-container {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-left: 5px solid var(--brand-blue); /* Akzent-Linie links */
+    border-radius: var(--radius);
+    animation: fadeIn 0.3s ease;
+}
+
+.info-text {
+    font-size: 0.9rem;
+    color: #555;
+    background: #f8f9fa;
+    padding: 15px;
+    border: 1px solid #e2e2e2;
+    margin-bottom: 20px;
+    border-radius: var(--radius);
+}
+
+/* ==========================================================================
+   10. MODAL (POP-UP FENSTER)
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Abdunklung */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px); /* Milchglas-Effekt */
+}
+
+.modal-content {
+    background-color: #fff;
+    width: 600px;
+    max-width: 90%; /* Responsive */
+    max-height: 80vh;
+    overflow-y: auto; /* Scrollen bei viel Text */
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    border-top: 5px solid var(--brand-blue);
+}
+
+#modal-title {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    color: var(--brand-blue);
+    font-size: 1.3rem;
+}
+
+.close-modal {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 0.8;
+}
+
+.close-modal:hover { color: #333; }
+
+/* Klickbare Links (PI-Nummern) */
+.pi-link {
+    color: var(--brand-blue);
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 1px dotted var(--brand-blue);
+}
+
+.pi-link:hover {
+    background-color: #e3f2fd;
+    text-decoration: none;
+    border-bottom: 1px solid var(--brand-blue);
+}
+
+/* ==========================================================================
+   11. HELPER & FOOTER
+   ========================================================================== */
+.hidden { display: none !important; }
+
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 50px;
+    padding-bottom: 30px;
+}
+
+/* Sanftes Einblenden */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
