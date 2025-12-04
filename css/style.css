@@ -1,10 +1,10 @@
 /* =========================================
-   1. ENTERPRISE DESIGN TOKENS
+   1. DESIGN TOKENS (Enterprise Style)
    ========================================= */
 :root {
     --header-bg: #354a5f;       
     --header-text: #ffffff;
-    --brand-primary: #0066cc;   
+    --brand-primary: #364b5f;   
     --brand-hover: #004c99;
     --success: #2e7d32;         
     --warning: #ed6c02;         
@@ -37,42 +37,44 @@ body {
 h1, h2, h3 { margin: 0 0 15px 0; font-weight: 600; color: var(--text-main); }
 
 /* =========================================
-   3. HEADER (ENDLICH GROSSES LOGO!)
+   3. HEADER & LOGO (EXTRA GROSS)
    ========================================= */
 header {
     background-color: var(--header-bg);
     color: var(--header-text);
-    padding: 25px; /* Viel Platz drumherum */
+    /* Vertikales Padding (15px), aber KEIN horizontales Padding im Header selbst, 
+       damit wir es im Content-Wrapper steuern können */
+    padding: 15px 0; 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Zentriert den Container in der Mitte des Bildschirms */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 100;
+    height: auto;
 }
 
 .header-content {
     width: 100%;
-    max-width: 1000px; /* Das Logo darf so breit werden wie der Inhalt */
+    /* Exakt dieselbe Breite wie 'main', damit es bündig ist */
+    max-width: 1000px; 
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* HIER IST DIE ÄNDERUNG: 'flex-start' schiebt das Logo nach links */
+    justify-content: flex-start; 
+    /* HIER IST DER TRICK: Dasselbe Padding wie bei 'main' (20px), 
+       damit das Logo exakt über den weißen Boxen startet */
+    padding: 0 20px; 
 }
 
-/* LOGO - BEFREIT VON FESSELN */
 .app-logo {
-    /* KEINE max-height mehr! Es ist jetzt so groß wie das Originalbild */
+    /* Höhe leicht angepasst, damit es links nicht zu wuchtig wirkt */
+    height: 70px; 
     width: auto;
-    height: auto;
-    /* Maximale Breite: 100% des Containers oder max. 300px, damit es auf riesigen Bildschirmen nicht explodiert */
-    max-width: 100%; 
-    /* Wenn du es noch größer willst, ändere 300px auf z.B. 500px */
-    /* max-width: 500px; */ 
-    
     display: block;
+    object-fit: contain;
 }
-
 /* =========================================
    4. LAYOUT
    ========================================= */
@@ -148,6 +150,8 @@ input[type="text"], input[type="number"], select, textarea {
     color: var(--text-main);
 }
 
+input::-webkit-calendar-picker-indicator { display: none !important; }
+
 input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--brand-primary);
@@ -190,6 +194,16 @@ button { font-family: var(--font-stack); cursor: pointer; border-radius: var(--r
 
 .dashed { width: 100%; border: 2px dashed var(--border-color); color: var(--brand-primary); margin: 15px 0; }
 
+.btn-delete {
+    background: #fff;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; transition: all 0.2s; border-radius: var(--radius);
+}
+.btn-delete:hover { background: var(--danger); color: #fff; }
+
 /* =========================================
    8. LISTEN & TABELLEN
    ========================================= */
@@ -199,41 +213,10 @@ button { font-family: var(--font-stack); cursor: pointer; border-radius: var(--r
     padding: 15px;
     border-radius: var(--radius);
     margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    /* ZENTRIERT DAS X */
-    align-items: center; 
+    display: flex; flex-wrap: wrap; gap: 15px; align-items: center; 
 }
-
-.pkg-row > div, .q-row > div {
-    flex: 1;
-    min-width: 120px;
-}
-
-/* Der Wrapper für den Löschen-Button (perfekt ausgerichtet) */
-.delete-btn-wrapper {
-    flex: 0 0 auto !important;
-    /* Der Abstand zum Label oben drüber */
-    margin-top: 24px; 
-}
-
-/* Der Button selbst */
-.btn-delete {
-    background: #fff;
-    border: 1px solid var(--danger);
-    color: var(--danger);
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    transition: all 0.2s;
-    border-radius: var(--radius);
-}
-.btn-delete:hover { background: var(--danger); color: #fff; }
-
+.pkg-row > div, .q-row > div { flex: 1; min-width: 120px; }
+.delete-btn-wrapper { flex: 0 0 auto !important; margin-top: 24px; }
 
 table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; border: 1px solid var(--border-color); }
 th { background-color: #f3f4f6; color: var(--text-main); font-weight: 600; text-align: left; padding: 12px 15px; border-bottom: 2px solid var(--border-color); }
@@ -260,10 +243,8 @@ td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); vertical-
 #modal-title { margin: 0; font-size: 1.1rem; color: var(--text-main); }
 #modal-body { padding: 25px; font-size: 0.95rem; color: #374151; }
 .close-modal { cursor: pointer; font-size: 1.5rem; color: var(--text-muted); line-height: 1; }
-
 .pi-link { color: var(--brand-primary); text-decoration: none; font-weight: 600; cursor: pointer; border-bottom: 1px dotted var(--brand-primary); }
 .pi-link:hover { border-bottom-style: solid; }
-
 .hidden { display: none !important; }
 footer { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 50px; padding-bottom: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
